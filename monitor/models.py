@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.db import models
 
 
@@ -6,6 +7,9 @@ class Monitor(models.Model):
     id = models.CharField(max_length=255, primary_key=True)
     type = models.CharField(max_length=255)
     description = models.TextField()
+
+    def getLastStatus(self):
+        return self.statuses.order_by('-timestamp')[:1].get()
 
 
 class Status(models.Model):
@@ -20,3 +24,4 @@ class Status(models.Model):
                             null=False)
     short_desc = models.CharField(max_length=128, null=False)
     desc = models.TextField()
+    timestamp = models.DateTimeField(default=timezone.now)
