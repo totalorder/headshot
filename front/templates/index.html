@@ -1,19 +1,49 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html>
 <head>
     <title></title>
     <meta http-equiv="refresh" content="10">
+    <link rel="stylesheet" type="text/css" href="{% static 'front/css/bootstrap.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'front/css/style.css' %}">
+    <style>
+        body {
+            margin-top : 30px;
+        }
+    </style>
+
 </head>
 <body>
-    <ul>
+    <div class="container-fluid">
+        <div class="row-fluid">
         {% for monitor in monitors %}
-            <li>
-                {% with monitor.getLastStatus as last_status %}
-                    <div>{{ monitor.id }}: {{ monitor.description }} ({{ monitor.type }})</div>
-                    <div>{{ last_status.code }}: {{ last_status.short_desc }} ({{ last_status.timestamp }})</div>
+            {% with monitor.getLastStatus as last_status %}
+                    {% if last_status.code == "OK" %}
+                        <div class="col-md-4 info_box success">
+                    {% elif last_status.code == "Warn" %}
+                        <div class="col-md-4 info_box warning">
+                    {% elif last_status.code == "Failed" %}
+                        <div class="col-md-4 info_box danger">
+                    {% else %}
+                        <div class="col-md-4 info_box gameover">
+                    {% endif %}
+
+                    <div class="ribbon">
+                        <span>{{ monitor.id }}</span>
+                    </div>
+
+                    <strong>CODE</strong>  {{last_status.code}}         <br>
+                    <strong>ID:</strong>   {{ monitor.id }}             <br>
+                    <strong>DESC:</strong> {{ monitor.description }}    <br>
+                    <strong>TYPE:</strong> {{ monitor.type }}           <br>
+                    <strong>DESC:</strong> {{ last_status.short_desc }} <br>
+                    <strong>TIME:</strong> {{ last_status.timestamp }}  <br>
+
                 {% endwith %}
-            </li>
+                </div>
+
         {% endfor %}
-    </ul>
+        </div>
+    </div>
 </body>
 </html>
