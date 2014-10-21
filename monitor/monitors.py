@@ -4,6 +4,7 @@ import threading
 import time
 import traceback
 import requests
+from monitor import oracle
 from monitor.models import Monitor, Status
 
 
@@ -33,6 +34,34 @@ class MonitorWorker(threading.Thread):
 
     def work(self):
         raise NotImplementedError()
+
+class DBMonitor(MonitorWorker):
+    def __init__(self, name, interval=10, dbid='dev'):
+        self.dbid = dbid
+        super(DBMonitor, self).__init__(name, interval)
+
+    def getDescription(self):
+        return self.dbid
+
+    def work(self):
+        status = Status()
+        status.monitor = self.monitor
+
+
+        try:
+            conn = oracle.createDatabaseConnection(self.dbid)
+            cur = conn.cursor()
+            cur.execute(u"SELECT id FROM item_master WHERE ROWNUM < 10")
+            result = cur.fetchall()
+            status.code = Status.OK
+            status.short_desc = "Good stuff"
+        except Exception as e:
+            status.code = Status.FAILED
+            status.short_desc = unicode(e)[:128]
+            status.desc = u"%s\n%s" % (e, traceback.format_exc())
+        status.save()
+
+
 
 
 class UrlMonitor(MonitorWorker):
@@ -75,4 +104,6 @@ class UrlMonitor(MonitorWorker):
 def getMonitors():
     return (
         UrlMonitor(u"Localhost", url=u"http://localhost:8000/"),
+        UrlMonitor(u"AIM Web: prd", url=u"http://prd.aim.deadlock.se:9000/"),
+        DBMonitor(u"AIM DB: dev", dbid="dev"),
     )
