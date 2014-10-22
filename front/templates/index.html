@@ -1,19 +1,61 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html>
 <head>
     <title></title>
     <meta http-equiv="refresh" content="10">
+    <link rel="stylesheet" type="text/css" href="{% static 'front/css/bootstrap.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'front/css/style.css' %}">
+    <style>
+        body {
+            margin-top : 30px;
+        }
+    </style>
+
 </head>
 <body>
-    <ul>
+    <div class="container-fluid">
+        <div class="row-fluid">
         {% for monitor in monitors %}
-            <li>
-                {% with monitor.getLastStatus as last_status %}
-                    <div>{{ monitor.id }}: {{ monitor.description }} ({{ monitor.type }})</div>
-                    <div>{{ last_status.code }}: {{ last_status.short_desc }} ({{ last_status.timestamp }})</div>
+            {% with monitor.getLastStatus as last_status %}
+                    {% if last_status.code == "OK" %}
+                        <div class="col-md-4 info_box success">
+                    {% elif last_status.code == "Warn" %}
+                        <div class="col-md-4 info_box warning">
+                    {% elif last_status.code == "Failed" %}
+                        <div class="col-md-4 info_box danger">
+                    {% else %}
+                        <div class="col-md-4 info_box gameover">
+                    {% endif %}
+                    <div class="ribbon">
+                        <span>{{ monitor.id }}</span>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-6 col-md-offset-3">
+                            <img src="{% static monitor.image %}" alt="image_not_found"/>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p>
+                                <strong>CODE</strong>  {{last_status.code}}
+                                <strong>ID:</strong>   {{ monitor.id }}
+                                <strong>DESC:</strong> {{ monitor.description }}
+                                <strong>TYPE:</strong> {{ monitor.type }}
+                                <strong>DESC:</strong> {{ last_status.short_desc }}
+                                <strong>TIME:</strong> {{ last_status.timestamp }}
+                            </p>
+                        </div>
+                    </div>
                 {% endwith %}
-            </li>
+                </div>
+
         {% endfor %}
-    </ul>
+        </div>
+    </div>
 </body>
 </html>
