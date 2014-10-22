@@ -27,18 +27,30 @@
                     {% else %}
                         <div class="col-md-4 info_box gameover">
                     {% endif %}
-
                     <div class="ribbon">
                         <span>{{ monitor.id }}</span>
                     </div>
-
-                    <strong>CODE</strong>  {{last_status.code}}         <br>
-                    <strong>ID:</strong>   {{ monitor.id }}             <br>
-                    <strong>DESC:</strong> {{ monitor.description }}    <br>
-                    <strong>TYPE:</strong> {{ monitor.type }}           <br>
-                    <strong>DESC:</strong> {{ last_status.short_desc }} <br>
-                    <strong>TIME:</strong> {{ last_status.timestamp }}  <br>
-
+                    <br>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-6 col-md-offset-3">
+                            <img src="{% static monitor.image %}" alt="image_not_found"/>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p>
+                                <strong>CODE</strong>  {{last_status.code}}
+                                <strong>ID:</strong>   {{ monitor.id }}
+                                <strong>DESC:</strong> {{ monitor.description }}
+                                <strong>TYPE:</strong> {{ monitor.type }}
+                                <strong>DESC:</strong> {{ last_status.short_desc }}
+                                <strong>TIME:</strong> {{ last_status.timestamp }}
+                            </p>
+                        </div>
+                    </div>
                 {% endwith %}
                 </div>
 
