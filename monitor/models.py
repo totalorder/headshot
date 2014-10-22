@@ -7,6 +7,7 @@ class Monitor(models.Model):
     id = models.CharField(max_length=255, primary_key=True)
     type = models.CharField(max_length=255)
     description = models.TextField()
+    image = models.TextField(default="front/images/db.gif")
 
     def getLastStatus(self):
         return self.statuses.order_by('-timestamp')[:1].get()

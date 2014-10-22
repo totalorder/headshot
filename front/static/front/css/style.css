@@ -54,3 +54,8 @@ body {
     /* shadow */
     text-shadow: 0 0 5px #444;
 }
+
+img {
+    max-width: 25%;
+    height: auto;
+}
