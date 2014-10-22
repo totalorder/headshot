@@ -10,6 +10,8 @@ import (
 	"net/http"
 	"io/ioutil"
 	"sync"
+	"os/exec"
+	"math"
 )
 
 const (
@@ -59,9 +61,7 @@ func (b BaseMonitor) work(db *sql.DB) {
 }
 
 func runMonitor(m Monitor, db *sql.DB) {
-	fmt.Println("Loopiung")
 	for {
-		fmt.Println("Loopaabng")
 		m.work(db)
 		time.Sleep(m.getInterval())
 	}
@@ -74,7 +74,6 @@ type URLMonitor struct {
 }
 
 func (u URLMonitor) work(db *sql.DB) {
-	fmt.Println("Downloading url")
 	var status Status
 	status.monitor_id = u.id
 	status.timestamp = time.Now()
@@ -109,18 +108,53 @@ func (u URLMonitor) work(db *sql.DB) {
 	}
 }
 
+type LocalProcessMonitor struct {
+	BaseMonitor
+	command string
+	success_message string
+}
+
+func (u LocalProcessMonitor) work(db *sql.DB) {
+	var status Status
+	status.monitor_id = u.id
+	status.timestamp = time.Now()
+	out_bytes, err := exec.Command(u.command).CombinedOutput()
+	out := string(out_bytes[:])
+
+	if err != nil {
+		desc := err.Error() + out
+		status.code = FAILED
+		status.short_desc = desc[:int(math.Min(float64(len(desc)),128))]
+		status.desc = desc
+		status.save(db)
+		return
+	}
+
+	short_desc := u.success_message + out
+	status.code = OK
+	status.short_desc = short_desc[:int(math.Min(float64(len(short_desc)),128))]
+	status.desc = out
+	status.save(db)
+}
+
 func main() {
 	db, err := sql.Open("postgres", "user=headshot dbname=headshot password=headshot")
 	if err != nil {
 		log.Panic(err)
 	}
+	defer db.Close()
 
 	monitors := []Monitor{
 		URLMonitor{BaseMonitor:BaseMonitor{
 			id:"Localhost",
 			interval: 10 * time.Second},
 			url: "http://localhost:8000/",
-			warn_latency: 200 * time.Millisecond}}
+			warn_latency: 200 * time.Millisecond},
+		LocalProcessMonitor{BaseMonitor:BaseMonitor{
+			id:"Oracle",
+			interval: 10 * time.Second},
+			command: "date",
+			success_message: "Connection successful! "}}
 
 	var wg sync.WaitGroup
 	for _, monitor := range monitors {
