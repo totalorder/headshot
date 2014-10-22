@@ -89,7 +89,7 @@ class UrlMonitor(MonitorWorker):
                     status.short_desc = u"(200) Latency is %s ms" % latency
                 else:
                     status.code = Status.OK
-                    status.short_desc = u"(200)"
+                    status.short_desc = u"(200) OK"
         except requests.HTTPError as e:
             status.code = Status.FAILED
             status.short_desc = unicode(e)[:128]
