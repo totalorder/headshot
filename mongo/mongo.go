@@ -31,9 +31,10 @@ type Status struct {
 
 func (s *Status) save(db *sql.DB) error {
 	fmt.Printf("Saving status: {monitor_id: %s, code: %s, short_desc: %s, desc: %s, timestamp: %s}\n", s.monitor_id, s.code, s.short_desc, s.desc, s.timestamp)
-	_, err := db.Query(`INSERT INTO monitor_status (monitor_id, code, short_desc, "desc", timestamp)
+	rows, err := db.Query(`INSERT INTO monitor_status (monitor_id, code, short_desc, "desc", timestamp)
 										 		 VALUES ($1, 		 $2,   $3, 		   $4, 	 $5)`,
 		s.monitor_id, s.code, s.short_desc, s.desc, s.timestamp)
+    defer rows.Close()
 	return err
 }
 
