@@ -25,14 +25,12 @@ body {
 }
 
 .ribbon {
-    background-color:#a00;
-    overflow: hidden;
-    white-space: nowrap;
-    /* top left corner */
     position: absolute;
-    left: 75%;
-    top: 20%;
-    /* 45 deg ccw rotation */
+    top: -20px;
+    right: -95px;
+    height: 100px;
+    width: 250px;
+    display: block;
     -webkit-transform: rotate(45deg);
     -moz-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
@@ -42,20 +40,29 @@ body {
     -webkit-box-shadow: 0 0 10px #888;
     -moz-box-shadow: 0 0 10px #888;
     box-shadow: 0 0 10px #888;
-}
-.ribbon span {
+    padding-top: 55px;
     border: 1px solid #faa;
+    background-color:#a00;
+}
+
+.ribbon span {
     color: #fff;
     display: block;
-    font: bold 81.25% 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    margin: 1px 0;
-    padding: 10px 80px;
+    width: 90px;
+    font: bold 100% 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    margin: auto;
     text-align: center;
-    /* shadow */
     text-shadow: 0 0 5px #444;
 }
 
 img {
     max-width: 25%;
-    height: auto;
+    /*height: auto;*/
+}
+
+.monitor-box {
+    float: left;
+    width: 250px;
+    height: 250px;
+    margin: 5px;
 }

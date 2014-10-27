@@ -15,18 +15,19 @@
 </head>
 <body>
     <div class="container-fluid">
-        <div class="row-fluid">
+        <div class="">
         {% for monitor in monitors %}
             {% with monitor.getLastStatus as last_status %}
+                <div class="col-md-4 monitor-box
                     {% if last_status.code == "OK" %}
-                        <div class="col-md-4 info_box success">
+                        info_box success
                     {% elif last_status.code == "Warn" %}
-                        <div class="col-md-4 info_box warning">
+                        info_box warning
                     {% elif last_status.code == "Failed" %}
-                        <div class="col-md-4 info_box danger">
+                        info_box danger
                     {% else %}
-                        <div class="col-md-4 info_box gameover">
-                    {% endif %}
+                        info_box gameover
+                    {% endif %}">
                     <div class="ribbon">
                         <span>{{ monitor.id }}</span>
                     </div>
