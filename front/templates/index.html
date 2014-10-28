@@ -28,29 +28,31 @@
                     {% else %}
                         info_box gameover
                     {% endif %}">
-                    <div class="ribbon">
+                    <div class="ribbon {% cycle "prd" "dev" %}">
                         <span>{{ monitor.id }}</span>
                     </div>
                     <br>
-                    <br>
-                    <div class="row">
-                        <div class="col-md-6 col-md-offset-3">
+                    <div class="">
+                        <div class="">
                             <img src="{% static monitor.image %}" alt="image_not_found"/>
                         </div>
                     </div>
                     <br>
-                    <br>
                     <div class="row">
                         <div class="col-md-12">
-                            <p>
-                                <strong>CODE</strong>  {{last_status.code}}
-                                <strong>ID:</strong>   {{ monitor.id }}
-                                <strong>DESC:</strong> {{ monitor.description }}
-                                <strong>TYPE:</strong> {{ monitor.type }}
-                                <strong>DESC:</strong> {{ last_status.short_desc }}
-                                <strong>TIME:</strong> {{ last_status.timestamp }}
-                            </p>
+                            <div class="status">
+                                {{ last_status.short_desc|truncatechars:"75" }}
+                            </div>
+{#                                <strong>CODE</strong>  {{last_status.code}}#}
+{#                                <strong>ID:</strong>   {{ monitor.id }}#}
+{#                                <strong>DESC:</strong> {{ monitor.description }}#}
+{#                                <strong>TYPE:</strong> {{ monitor.type }}#}
+{#                                <strong>DESC:</strong> {{ last_status.short_desc }}#}
+{#                                <strong>TIME:</strong> {{ last_status.timestamp }}#}
                         </div>
+                    </div>
+                    <div class="time">
+                        {{ last_status.timestamp|date:"Y-m-d H:i:s" }}
                     </div>
                 {% endwith %}
                 </div>

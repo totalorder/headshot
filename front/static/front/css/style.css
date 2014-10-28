@@ -1,5 +1,5 @@
 body {
-    background-color: #eee;
+    background-color: #444;
 }
 
 .info_box {
@@ -9,7 +9,7 @@ body {
 }
 
 .success {
-    background-color: #5cb85c;
+    background-color: #73F570;
 }
 
 .warning {
@@ -17,7 +17,7 @@ body {
 }
 
 .danger {
-    background-color: #d9534f;
+    background-color: #d96e67;
 }
 
 .gameover {
@@ -26,43 +26,63 @@ body {
 
 .ribbon {
     position: absolute;
-    top: -20px;
-    right: -95px;
-    height: 100px;
-    width: 250px;
+    top: -6%;
+    right: -37%;
+    height: 37%;
+    width: 100%;
     display: block;
     -webkit-transform: rotate(45deg);
     -moz-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     -o-transform: rotate(45deg);
     transform: rotate(45deg);
-    /* shadow */
-    -webkit-box-shadow: 0 0 10px #888;
-    -moz-box-shadow: 0 0 10px #888;
-    box-shadow: 0 0 10px #888;
-    padding-top: 55px;
-    border: 1px solid #faa;
-    background-color:#a00;
+    padding-top: 24%;
+}
+
+.ribbon.prd {
+    background-color: #40A5A5;
+}
+
+.ribbon.dev {
+    background-color: #b646b2;
 }
 
 .ribbon span {
-    color: #fff;
+    color: #dfdfdf;
     display: block;
-    width: 90px;
-    font: bold 100% 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    width: 41%;
+    font: bold 150% 'Helvetica Neue', Helvetica, Arial, sans-serif;
     margin: auto;
     text-align: center;
     text-shadow: 0 0 5px #444;
 }
 
 img {
-    max-width: 25%;
+    width: 50%;
     /*height: auto;*/
 }
 
 .monitor-box {
+    padding-top: 2%;
     float: left;
-    width: 250px;
-    height: 250px;
+    width: 350px;
+    height: 350px;
     margin: 5px;
+}
+
+.status {
+    font-weight: bold;
+    word-wrap: break-word;
+    font: bold 150% 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: #444;
+    height: 20%;
+    overflow-y: hidden;
+}
+
+.time {
+    position: absolute;
+    bottom: 5%;
+    left: 22%;
+    color: #444;
+    font-size: 150%;
 }
