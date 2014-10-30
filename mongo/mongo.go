@@ -138,6 +138,58 @@ func (u LocalProcessMonitor) work(db *sql.DB) {
 	status.save(db)
 }
 
+func createURLMonitors(monitors []Monitor, db *sql.DB) []Monitor {
+	rows, err := db.Query(`SELECT m.id, m.interval, u.url, u.warn_latency
+						   FROM monitor_monitor AS m
+						   JOIN monitor_urlmonitor as u ON (m.id = u.monitor_ptr_id)`)
+	if err != nil {
+		log.Panic(err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var urlmonitor URLMonitor
+		var interval int64
+		var warn_latency int64
+		if err := rows.Scan(&urlmonitor.id, &interval, &urlmonitor.url, &warn_latency); err != nil {
+			log.Panic(err)
+		}
+		urlmonitor.interval = time.Duration(interval) * time.Second
+		urlmonitor.warn_latency = time.Duration(warn_latency) * time.Millisecond
+		fmt.Print(urlmonitor.warn_latency)
+		monitors = append(monitors, urlmonitor)
+	}
+	return monitors
+}
+
+func createLocalProcessMonitors(monitors []Monitor, db *sql.DB) []Monitor {
+	rows, err := db.Query(`SELECT m.id, m.interval, u.command, u.success_message
+						   FROM monitor_monitor AS m
+						   JOIN monitor_localprocessmonitor as u ON (m.id = u.monitor_ptr_id)`)
+	if err != nil {
+		log.Panic(err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var lpmonitor LocalProcessMonitor
+		var interval int64
+		if err := rows.Scan(&lpmonitor.id, &interval, &lpmonitor.command, &lpmonitor.success_message); err != nil {
+			log.Panic(err)
+		}
+		lpmonitor.interval = time.Duration(interval) * time.Second
+		monitors = append(monitors, lpmonitor)
+	}
+	return monitors
+}
+
+func createMonitors(db *sql.DB) []Monitor {
+	var monitors []Monitor
+	monitors = createURLMonitors(monitors, db)
+	monitors = createLocalProcessMonitors(monitors, db)
+	return monitors
+}
+
 func main() {
 	db, err := sql.Open("postgres", "user=headshot dbname=headshot password=headshot")
 	if err != nil {
@@ -145,17 +197,7 @@ func main() {
 	}
 	defer db.Close()
 
-	monitors := []Monitor{
-		URLMonitor{BaseMonitor:BaseMonitor{
-			id:"Localhost",
-			interval: 10 * time.Second},
-			url: "http://localhost:8000/",
-			warn_latency: 200 * time.Millisecond},
-		LocalProcessMonitor{BaseMonitor:BaseMonitor{
-			id:"Oracle",
-			interval: 10 * time.Second},
-			command: "date",
-			success_message: "Connection successful! "}}
+	monitors := createMonitors(db)
 
 	var wg sync.WaitGroup
 	for _, monitor := range monitors {

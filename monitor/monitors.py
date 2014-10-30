@@ -16,14 +16,6 @@ class MonitorWorker(threading.Thread):
         self.interval = interval
         self.image = image
 
-        try:
-            self.monitor = Monitor.objects.get(pk=self.name)
-        except Monitor.DoesNotExist:
-            self.monitor = Monitor.objects.create(pk=self.name,
-                                                  type=self.__class__.__name__,
-                                                  description=self.getDescription(),
-                                                  image=self.image)
-
     def getDescription(self):
         raise NotImplementedError()
 
@@ -37,6 +29,7 @@ class MonitorWorker(threading.Thread):
 
     def work(self):
         raise NotImplementedError()
+
 
 class DBMonitor(MonitorWorker):
     def __init__(self, name, image, interval=10, dbid='dev'):

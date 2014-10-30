@@ -28,8 +28,8 @@
                     {% else %}
                         info_box gameover
                     {% endif %}">
-                    <div class="ribbon {% cycle "prd" "dev" %}">
-                        <span>{{ monitor.id }}</span>
+                    <div class="ribbon {% if monitor.environment == "prd" %}prd{% else %}dev{% endif %}">
+                        <span>{{ monitor.type }} {{ monitor.environment }}</span>
                     </div>
                     <br>
                     <div class="">
