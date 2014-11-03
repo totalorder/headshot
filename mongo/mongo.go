@@ -12,6 +12,7 @@ import (
 	"sync"
 	"os/exec"
 	"math"
+	"strings"
 )
 
 const (
@@ -119,7 +120,8 @@ func (u LocalProcessMonitor) work(db *sql.DB) {
 	var status Status
 	status.monitor_id = u.id
 	status.timestamp = time.Now()
-	out_bytes, err := exec.Command(u.command).CombinedOutput()
+	split_command := strings.Split(u.command, " ")
+	out_bytes, err := exec.Command(split_command[0], split_command[1:]...).CombinedOutput()
 	out := string(out_bytes[:])
 
 	if err != nil {
