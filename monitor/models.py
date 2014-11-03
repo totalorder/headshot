@@ -10,7 +10,6 @@ class Monitor(models.Model):
         TRN = 'trn'
         PRD = 'prd'
 
-    type = models.CharField(max_length=255, null=False, blank=False)
     environment = models.CharField(max_length=3, null=False, blank=False, choices=(
         (Envs.DEV, Envs.DEV),
         (Envs.TST, Envs.TST),
@@ -23,10 +22,8 @@ class Monitor(models.Model):
     def getLastStatus(self):
         return self.statuses.order_by('-timestamp')[:1].get()
 
-    def save(self, *args, **kwargs):
-        if not self.type:
-            self.type = self.__class__.__name__
-        super(Monitor, self).save(*args, **kwargs)
+    def __unicode__(self):
+        return self.description
 
 
 class URLMonitor(Monitor):

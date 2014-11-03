@@ -1,3 +1,14 @@
 from django.contrib import admin
+from monitor.models import URLMonitor, LocalProcessMonitor
 
-# Register your models here.
+
+class URLMonitorAdmin(admin.ModelAdmin):
+    pass
+
+admin.site.register(URLMonitor, URLMonitorAdmin)
+
+
+class LocalProcessMonitorAdmin(admin.ModelAdmin):
+    pass
+
+admin.site.register(LocalProcessMonitor, LocalProcessMonitorAdmin)
