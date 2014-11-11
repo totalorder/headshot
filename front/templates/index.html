@@ -15,50 +15,44 @@
 </head>
 <body>
     <div class="container-fluid">
-        <div class="">
         {% for monitor in monitors %}
             {% with monitor.getLastStatus as last_status %}
-                <div class="col-md-4 monitor-box
-                    {% if last_status.code == "OK" %}
-                        info_box success
-                    {% elif last_status.code == "Warn" %}
-                        info_box warning
-                    {% elif last_status.code == "Failed" %}
-                        info_box danger
-                    {% else %}
-                        info_box gameover
-                    {% endif %}">
-                    <div class="ribbon {% if monitor.environment == "prd" %}prd{% else %}dev{% endif %}">
-                        <span>{{ monitor.type }} {{ monitor.environment }}</span>
-                    </div>
-                    <br>
-                    <div class="">
+                <div class="monitor-box-container">
+                    <div class="monitor-box-width-dummy"></div>
+                    <div class="col-md-4 monitor-box elementt
+                        {% if last_status.code == "OK" %}
+                            info_box success
+                        {% elif last_status.code == "Warn" %}
+                            info_box warning
+                        {% elif last_status.code == "Failed" %}
+                            info_box danger
+                        {% else %}
+                            info_box gameover
+                        {% endif %}">
+                        <div class="ribbon {% if monitor.environment == "prd" %}prd{% else %}dev{% endif %}">
+                            <span>{{ monitor.type }} {{ monitor.environment }}</span>
+                        </div>
+                        <br>
                         <div class="">
-                            <img src="{% static monitor.image %}" alt="image_not_found"/>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="status">
-                                {{ last_status.short_desc|truncatechars:"75" }}
+                            <div class="">
+                                <img src="{% static monitor.image %}" alt="image_not_found"/>
                             </div>
-{#                                <strong>CODE</strong>  {{last_status.code}}#}
-{#                                <strong>ID:</strong>   {{ monitor.id }}#}
-{#                                <strong>DESC:</strong> {{ monitor.description }}#}
-{#                                <strong>TYPE:</strong> {{ monitor.type }}#}
-{#                                <strong>DESC:</strong> {{ last_status.short_desc }}#}
-{#                                <strong>TIME:</strong> {{ last_status.timestamp }}#}
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="status">
+                                    {{ last_status.short_desc|truncatechars:"75" }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="time">
+                            {{ last_status.timestamp|date:"Y-m-d H:i:s" }}
                         </div>
                     </div>
-                    <div class="time">
-                        {{ last_status.timestamp|date:"Y-m-d H:i:s" }}
-                    </div>
-                {% endwith %}
                 </div>
-
+            {% endwith %}
         {% endfor %}
-        </div>
     </div>
 </body>
 </html>

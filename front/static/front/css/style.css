@@ -59,7 +59,6 @@ body {
 
 img {
     width: 50%;
-    /*height: auto;*/
 }
 
 .monitor-box {
@@ -69,6 +68,39 @@ img {
     height: 350px;
     margin: 5px;
 }
+
+@media screen and (max-width: 765px) {
+    .monitor-box {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: auto;
+        height: auto;
+    }
+
+    body {
+        margin-top: 0 !important;
+    }
+
+    .container-fluid {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .monitor-box-container {
+        display: inline-block;
+        position: relative;
+        width: 49%;
+    }
+
+    .monitor-box-width-dummy {
+        margin-top: 100%;
+    }
+}
+
+
 
 .status {
     font-weight: bold;
