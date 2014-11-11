@@ -40,11 +40,11 @@ body {
 }
 
 .ribbon.prd {
-    background-color: #40A5A5;
+    background-color: #b646b2;
 }
 
 .ribbon.dev {
-    background-color: #b646b2;
+    background-color: #40A5A5;
 }
 
 .ribbon span {
