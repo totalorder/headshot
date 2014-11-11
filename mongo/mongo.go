@@ -39,6 +39,10 @@ func (s *Status) save(db *sql.DB) error {
 	return err
 }
 
+func getShortMessage(message string) string {
+	return message[:int(math.Min(float64(len(message)),128))]
+}
+
 type Monitor interface {
 	work(db *sql.DB)
 	getId() string
@@ -80,10 +84,11 @@ func (u URLMonitor) work(db *sql.DB) {
 	status.monitor_id = u.id
 	status.timestamp = time.Now()
 	start_time := time.Now()
-	resp, err := http.Get("http://example.com/")
+	resp, err := http.Get(u.url)
 	if err != nil {
 		status.code = FAILED
-		status.short_desc = resp.Status
+		status.short_desc = getShortMessage(fmt.Sprintf("(500) %s", err))
+		status.desc = fmt.Sprintf("%s", err)
 		status.save(db)
 		return
 	}
@@ -92,7 +97,7 @@ func (u URLMonitor) work(db *sql.DB) {
 	_, err = ioutil.ReadAll(resp.Body)
 	if err != nil {
 		status.code = FAILED
-		status.short_desc = fmt.Sprintf("Could not read body (%s) %s", resp.Status, err)[:128]
+		status.short_desc = getShortMessage(fmt.Sprintf("Could not read body (%s) %s", resp.Status, err))
 		status.desc = fmt.Sprintf("Could not read body (%s) %s", resp.Status, err)
 		status.save(db)
 		return
@@ -127,7 +132,7 @@ func (u LocalProcessMonitor) work(db *sql.DB) {
 	if err != nil {
 		desc := err.Error() + out
 		status.code = FAILED
-		status.short_desc = desc[:int(math.Min(float64(len(desc)),128))]
+		status.short_desc = getShortMessage(desc)
 		status.desc = desc
 		status.save(db)
 		return
@@ -135,7 +140,7 @@ func (u LocalProcessMonitor) work(db *sql.DB) {
 
 	short_desc := u.success_message + out
 	status.code = OK
-	status.short_desc = short_desc[:int(math.Min(float64(len(short_desc)),128))]
+	status.short_desc = getShortMessage(short_desc)
 	status.desc = out
 	status.save(db)
 }
